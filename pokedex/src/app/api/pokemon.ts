@@ -8,22 +8,31 @@ export type pokemonType = {
   id: string;
   imageUrl: string;
   info: any;
+  pokemonData: {
+    names: {
+      name: string;
+    }[];
+  };
 };
 
 export async function getPokemonList({ query }: pokemonListQueryParams) {
   const response = await fetch(query);
-
   const data = await response.json();
-  const pokemons = data.results.map((pokemon: pokemonType) => {
-    const urlParts = pokemon.url.split('/');
-    const id = urlParts[urlParts.length - 2];
-    const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
-    return {
-      ...pokemon,
-      imageUrl,
-      id,
-    };
-  });
+  const pokemons = await Promise.all(
+    data.results.map(async (pokemon: pokemonType) => {
+      const urlParts = pokemon.url.split('/');
+      const id = urlParts[urlParts.length - 2];
+      const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+      const pokemonData = await getPokemonInfo({ id });
+
+      return {
+        ...pokemon,
+        pokemonData,
+        imageUrl,
+        id,
+      };
+    })
+  );
 
   return { ...data, results: pokemons };
 }

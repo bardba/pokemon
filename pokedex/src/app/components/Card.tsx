@@ -5,18 +5,12 @@ import { useEffect, useState } from 'react';
 type CardProps = {
   imgUrl: string;
   id: string;
+  name: string;
 };
 
-const UserCard = ({ imgUrl, id }: CardProps) => {
-  const [korName, setKorName] = useState('');
-  useEffect(() => {
-    getPokemonInfo({ id }).then((res) => {
-      setKorName(res.names[2].name);
-    });
-  }, []);
-
+const UserCard = ({ imgUrl, name, id }: CardProps) => {
   return (
-    <div className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-4 min-h-[150px]">
+    <div className="flex flex-col items-center justify-start bg-white rounded-lg shadow-lg p-4 min-h-[100px]">
       <Image
         src={imgUrl || ''}
         width={40}
@@ -25,7 +19,9 @@ const UserCard = ({ imgUrl, id }: CardProps) => {
         placeholder="blur"
         blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
       />
-      <p className="font-bold text-gray-800">{korName}</p>
+      <p className="font-bold text-gray-800">
+        {id}. {name}
+      </p>
     </div>
   );
 };
