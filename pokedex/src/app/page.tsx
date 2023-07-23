@@ -1,5 +1,3 @@
-'use client';
-
 import Pokemons from './components/Pokemons';
 
 export default function Home() {

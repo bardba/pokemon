@@ -3,14 +3,8 @@
 import { useEffect } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
-
 import Card from '@/app/components/Card';
-import { getPokemonList } from '@/app/api/pokemon';
-
-type PokemonType = {
-  name: string;
-  url: string;
-};
+import { getPokemonList, pokemonType } from '@/app/api/pokemon';
 
 const Pokemons = () => {
   const { ref, inView } = useInView();
@@ -42,25 +36,22 @@ const Pokemons = () => {
     }
   }, [hasNextPage, inView, fetchNextPage]);
 
-  if (error as any)
-    return (
-      <div className="mt-10">
-        {'An error has occurred: ' + (error as any).message}
-      </div>
-    );
+  if (error) return <div className="mt-10">An error has occurred</div>;
+
+  useEffect(() => {}, [data]);
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10 min-h-[600px]">
       {isSuccess &&
         data?.pages.map((page) =>
-          page?.results.map((pokemon: PokemonType, index: number) => {
+          page?.results.map((pokemon: pokemonType, index: number) => {
             if (page.results.length === index + 1) {
               return (
                 <div ref={ref} key={index}>
                   <Card
                     key={pokemon.name}
-                    name={pokemon.name}
-                    url={pokemon.url}
+                    id={pokemon.id}
+                    imgUrl={pokemon.imageUrl}
                   />
                 </div>
               );
@@ -68,8 +59,8 @@ const Pokemons = () => {
               return (
                 <Card
                   key={pokemon.name}
-                  name={pokemon.name}
-                  url={pokemon.url}
+                  id={pokemon.id}
+                  imgUrl={pokemon.imageUrl}
                 />
               );
             }
