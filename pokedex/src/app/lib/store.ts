@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { getPokemonEvolutionInfo, getPokemonInfo } from '@/app/api/pokemon'; // Ensure to import your API method
+import { getPokemonEvolutionInfo, getPokemonInfo } from '@/app/api/pokemon';
 import { IPokemonSpecies } from '../types/pokemon';
 
 type PokemonStore = {

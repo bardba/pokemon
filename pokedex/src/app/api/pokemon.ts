@@ -80,14 +80,12 @@ export async function getPokemonEvolutionInfo({
   const data = await response.json();
   let chain = data.chain;
 
-  // Initialize evolution chain array
   let evolutionChain = [];
 
   while (chain != null) {
     let speciesUrlParts = chain.species.url.split('/');
-    let pokemonId = speciesUrlParts[speciesUrlParts.length - 2]; // get the second last part of the url which is the id
+    let pokemonId = speciesUrlParts[speciesUrlParts.length - 2];
 
-    // Fetch the pokemon's detail to get Korean name
     const pokemonDetailResponse = await fetch(
       `https://pokeapi.co/api/v2/pokemon-species/${pokemonId}`
     );
