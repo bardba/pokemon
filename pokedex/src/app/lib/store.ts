@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { getPokemonInfo } from '@/app/api/pokemon'; // Ensure to import your API method
+import { getPokemonEvolutionInfo, getPokemonInfo } from '@/app/api/pokemon'; // Ensure to import your API method
 import { IPokemonSpecies } from '../types/pokemon';
 
 type PokemonStore = {
@@ -27,13 +27,20 @@ type ModalStore = {
   setShowModal: (showModal: boolean, id: string) => void;
   id: string;
   pokemonInfo: IPokemonSpecies | null;
+  pokeEvolutionInfo: any;
 };
 
 export const useModalStore = create<ModalStore>((set) => ({
   showModal: false,
+  pokeEvolutionInfo: null,
   setShowModal: async (showModal, id) => {
     const pokemonInfo = showModal ? await getPokemonInfo({ id }) : null;
-    set(() => ({ showModal, id, pokemonInfo }));
+    const pokeEvolutionInfo = showModal
+      ? await getPokemonEvolutionInfo({
+          id: pokemonInfo.evolution_chain.url.split('/')[6],
+        })
+      : null;
+    set(() => ({ showModal, id, pokemonInfo, pokeEvolutionInfo }));
   },
   id: '',
   pokemonInfo: null,

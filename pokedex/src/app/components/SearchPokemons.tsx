@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 import { useSearchTermStore } from '../lib/store';
 
 const SearchPokemons = () => {
