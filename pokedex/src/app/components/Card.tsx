@@ -1,10 +1,8 @@
 import Image from 'next/image';
-import { getPokemonInfo } from '../api/pokemon';
-import { useEffect, useState } from 'react';
 
 type CardProps = {
-  imgUrl: string;
-  id: string;
+  imgUrl?: string;
+  id?: string;
   name: string;
 };
 

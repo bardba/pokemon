@@ -1,28 +1,23 @@
 import { create } from 'zustand';
+import { getPokemonInfo } from '@/app/api/pokemon'; // Ensure to import your API method
+import { IPokemonSpecies } from '../types/pokemon';
 
-interface State {
-  offset: number;
-  page: number;
-  limit: number;
-  setPage: (page: number) => void;
-  nextPage: () => void;
-  prevPage: () => void;
-}
+type Store = {
+  searchTerm: string;
+  setSearchTerm: (searchTerm: string) => void;
+  searchResult: IPokemonSpecies | null;
+  setSearchResult: (searchResults: IPokemonSpecies | null) => void;
+  searchPokemon: () => Promise<void>;
+};
 
-export const usePaginationStore = create<State>((set, get) => ({
-  offset: 0,
-  page: 0,
-  limit: 12,
-  setPage: (page: number) => {
-    const offset = page * get().limit;
-    set({ ...get(), page, offset });
-  },
-  nextPage: () => {
-    const { page } = get();
-    get().setPage(page + 1);
-  },
-  prevPage: () => {
-    const { page } = get();
-    get().setPage(page - 1);
+export const useSearchTermStore = create<Store>((set, get) => ({
+  searchTerm: '',
+  setSearchTerm: (searchTerm) => set(() => ({ searchTerm })),
+  searchResult: null,
+  setSearchResult: (searchResult) => set(() => ({ searchResult })),
+  searchPokemon: async () => {
+    const { searchTerm } = get();
+    const results = await getPokemonInfo({ id: searchTerm });
+    set({ searchResult: results });
   },
 }));

@@ -1,20 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 import Card from '@/app/components/Card';
-import { getPokemonList, pokemonType } from '@/app/api/pokemon';
-
-type pokemonPage = {
-  next: string;
-  previous: string;
-  results: pokemonType[];
-};
+import { getPokemonList } from '@/app/api/pokemon';
+import { IPokemonList } from '../types/pokemon';
+import { useSearchTermStore } from '../lib/store';
 
 const Pokemons = () => {
   const { ref, inView } = useInView();
-  const [searchTerm, setSearchTerm] = useState('');
+  const { searchResult, searchTerm } = useSearchTermStore();
 
   const {
     data,
@@ -31,27 +27,9 @@ const Pokemons = () => {
       getPokemonList({
         query: pageParam,
       }),
-    queryKey: ['pokemons', searchTerm],
+    queryKey: ['pokemons'],
     getNextPageParam: (lastPage) => {
       return lastPage.next;
-    },
-    select: (datas: { pages: pokemonPage[]; pageParams: any[] }) => {
-      if (searchTerm) {
-        const filteredPages = datas.pages.map((page) => {
-          return {
-            ...page,
-            results: page.results.filter((pokemon) =>
-              pokemon.id.includes(searchTerm)
-            ),
-          };
-        });
-
-        return {
-          pageParams: datas.pageParams,
-          pages: filteredPages,
-        };
-      }
-      return datas;
     },
   });
 
@@ -67,17 +45,11 @@ const Pokemons = () => {
 
   return (
     <>
-      <input
-        className="w-full p-2 rounded-md shadow-md text-black mt-10"
-        type="text"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        placeholder="포켓몬 아이디를 입력하세요."
-      />
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10  w-full">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10 w-full">
         {isSuccess &&
+          searchTerm === '' &&
           data?.pages?.map((page) =>
-            page?.results?.map((pokemon: pokemonType, index: number) => {
+            (page as IPokemonList)?.results?.map((pokemon, index: number) => {
               if (page.results.length === index + 1) {
                 return (
                   <div ref={ref} key={index}>

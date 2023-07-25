@@ -1,25 +1,19 @@
+import { INamedApiResource, IPokemon } from '../types/pokemon';
+
 type pokemonListQueryParams = {
   query: string;
 };
 
-export type pokemonType = {
-  name: string;
-  url: string;
-  id: string;
-  imageUrl: string;
-  info: any;
-  pokemonData: {
-    names: {
-      name: string;
-    }[];
-  };
-};
-
 export async function getPokemonList({ query }: pokemonListQueryParams) {
   const response = await fetch(query);
+
+  if (response.status === 404) {
+    return null;
+  }
+
   const data = await response.json();
   const pokemons = await Promise.all(
-    data.results.map(async (pokemon: pokemonType) => {
+    data.results.map(async (pokemon: INamedApiResource<IPokemon>) => {
       const urlParts = pokemon.url.split('/');
       const id = urlParts[urlParts.length - 2];
       const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
@@ -43,8 +37,18 @@ type pokemonInfoQueryParams = {
 
 export async function getPokemonInfo({ id }: pokemonInfoQueryParams) {
   const response = await fetch(
-    `https://pokeapi.co/api/v2/pokemon-species/${id}/`
+    `https://pokeapi.co/api/v2/pokemon-species/${id}`
   );
 
-  return response.json();
+  if (response.status === 404) {
+    return null;
+  }
+
+  const data = await response.json();
+  const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+
+  return {
+    ...data,
+    imageUrl,
+  };
 }
