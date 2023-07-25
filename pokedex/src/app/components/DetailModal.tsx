@@ -8,10 +8,6 @@ const DetailModal = () => {
     useModalStore();
   const modalRef = useRef<any>();
 
-  useEffect(() => {
-    console.log(pokeEvolutionInfo);
-  }, [pokeEvolutionInfo]);
-
   const handleClickOutside = (event: React.MouseEvent) => {
     if (modalRef.current && !modalRef.current?.contains(event.target)) {
       setShowModal(false, '');
