@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useModalStore } from '../lib/store';
 
 type CardProps = {
   imgUrl?: string;
@@ -7,8 +8,12 @@ type CardProps = {
 };
 
 const UserCard = ({ imgUrl, name, id }: CardProps) => {
+  const { setShowModal } = useModalStore();
   return (
-    <div className="flex flex-col items-center justify-start bg-white rounded-lg shadow-lg p-4 min-h-[100px]">
+    <div
+      onClick={() => setShowModal(true, id || '')}
+      className="flex flex-col items-center justify-start bg-white rounded-lg shadow-lg p-4 min-h-[100px] cursor-pointer"
+    >
       <Image
         src={imgUrl || ''}
         width={40}

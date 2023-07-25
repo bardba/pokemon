@@ -1,4 +1,6 @@
+import DetailModal from './components/DetailModal';
 import Pokemons from './components/Pokemons';
+import Portal from './components/Portal';
 import ResultPokemons from './components/ResultPokemons';
 import SearchPokemons from './components/SearchPokemons';
 
@@ -9,6 +11,9 @@ export default function Home() {
       <SearchPokemons />
       <ResultPokemons />
       <Pokemons />
+      <Portal>
+        <DetailModal />
+      </Portal>
     </main>
   );
 }

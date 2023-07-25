@@ -2,7 +2,6 @@
 
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useSearchTermStore } from '../lib/store';
-import ResultPokemons from './ResultPokemons';
 
 const SearchPokemons = () => {
   const { searchTerm, setSearchTerm, searchPokemon } = useSearchTermStore();

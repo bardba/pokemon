@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { getPokemonInfo } from '@/app/api/pokemon'; // Ensure to import your API method
 import { IPokemonSpecies } from '../types/pokemon';
 
-type Store = {
+type PokemonStore = {
   searchTerm: string;
   setSearchTerm: (searchTerm: string) => void;
   searchResult: IPokemonSpecies | null;
@@ -10,7 +10,7 @@ type Store = {
   searchPokemon: () => Promise<void>;
 };
 
-export const useSearchTermStore = create<Store>((set, get) => ({
+export const useSearchTermStore = create<PokemonStore>((set, get) => ({
   searchTerm: '',
   setSearchTerm: (searchTerm) => set(() => ({ searchTerm })),
   searchResult: null,
@@ -20,4 +20,21 @@ export const useSearchTermStore = create<Store>((set, get) => ({
     const results = await getPokemonInfo({ id: searchTerm });
     set({ searchResult: results });
   },
+}));
+
+type ModalStore = {
+  showModal: boolean;
+  setShowModal: (showModal: boolean, id: string) => void;
+  id: string;
+  pokemonInfo: IPokemonSpecies | null;
+};
+
+export const useModalStore = create<ModalStore>((set) => ({
+  showModal: false,
+  setShowModal: async (showModal, id) => {
+    const pokemonInfo = showModal ? await getPokemonInfo({ id }) : null;
+    set(() => ({ showModal, id, pokemonInfo }));
+  },
+  id: '',
+  pokemonInfo: null,
 }));

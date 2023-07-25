@@ -18,7 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <QueryWrapper>
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          {children}
+          <div id="modal-root" />
+        </body>
       </QueryWrapper>
     </html>
   );

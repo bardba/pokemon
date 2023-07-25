@@ -10,7 +10,7 @@ import { useSearchTermStore } from '../lib/store';
 
 const Pokemons = () => {
   const { ref, inView } = useInView();
-  const { searchResult, searchTerm } = useSearchTermStore();
+  const { searchTerm } = useSearchTermStore();
 
   const {
     data,
